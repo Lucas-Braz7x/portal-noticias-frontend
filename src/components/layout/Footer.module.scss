@@ -1,0 +1,13 @@
+@use '../../styles/variables' as *;
+
+.footer {
+  margin-top: auto;
+  border-top: 1px solid $color-border;
+  padding-block: $spacing-lg;
+}
+
+.text {
+  font-size: 0.875rem;
+  color: $color-muted;
+  text-align: center;
+}

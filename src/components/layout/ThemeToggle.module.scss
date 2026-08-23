@@ -1,0 +1,39 @@
+@use '../../styles/variables' as *;
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: $touch-target-min;
+  min-height: $touch-target-min;
+  padding: $spacing-xs;
+  color: $color-foreground;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  background: $color-background;
+  cursor: pointer;
+  transition:
+    color $transition-fast,
+    background-color $transition-fast,
+    border-color $transition-fast;
+
+  &:hover {
+    color: $color-accent;
+    background: color-mix(in srgb, $color-accent 8%, $color-background);
+    border-color: color-mix(in srgb, $color-accent 35%, $color-border);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-accent;
+    outline-offset: 2px;
+  }
+
+  &:not(.ready) {
+    cursor: default;
+  }
+}
+
+.icon {
+  display: block;
+  flex-shrink: 0;
+}
