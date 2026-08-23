@@ -2,6 +2,10 @@
   "name": "portal-noticias-frontend",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "yarn@1.22.22",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "next dev --port 3001",
     "build": "next build",
@@ -11,8 +15,10 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,scss}\" \"test/**/*.{ts,tsx}\" \"*.{json,md,mjs}\"",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:cov": "vitest run --coverage",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "prepare": "husky"
   },
   "dependencies": {
     "next": "16.3.2",
@@ -29,14 +35,15 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^5.1.0",
+    "@vitest/coverage-v8": "^3.2.4",
     "eslint": "^9",
     "eslint-config-next": "16.3.2",
     "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
     "jsdom": "^27.0.0",
     "prettier": "^3.6.2",
     "sass": "^1.93.2",
     "typescript": "^5",
     "vitest": "^3.2.4"
-  },
-  "packageManager": "yarn@1.22.22"
+  }
 }
