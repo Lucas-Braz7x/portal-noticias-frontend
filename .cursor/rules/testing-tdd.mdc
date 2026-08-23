@@ -1,0 +1,47 @@
+---
+description: Convenções de testes e TDD no frontend
+globs: "**/*.{spec,test}.{ts,tsx}"
+alwaysApply: false
+---
+
+# TDD e Testes
+
+## Ciclo obrigatório
+1. **Red** — escrever teste que falha
+2. **Green** — implementar o mínimo para passar
+3. **Refactor** — melhorar sem quebrar testes
+
+## Ferramentas
+
+| Ferramenta | Uso |
+|------------|-----|
+| Vitest | Runner de testes |
+| Testing Library | Componentes React |
+| jsdom | Ambiente DOM |
+
+**Comandos:** `yarn test`, `yarn test:watch`
+
+## O que testar
+
+| Camada | Onde | Mock? |
+|--------|------|-------|
+| API client | `test/lib/api/` | Sim — mock de `fetch` |
+| Componentes UI | `test/components/` | Render + interações |
+| Páginas | Integração/E2E (futuro) | API mockada ou backend real |
+
+## Exemplo — API client
+
+```typescript
+vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+  ok: true,
+  json: () => Promise.resolve(mockResponse),
+}));
+
+const result = await listArticles({ page: 1 });
+expect(result.data).toHaveLength(1);
+```
+
+## O que evitar
+- Testes que apenas verificam implementação interna
+- Mock de lógica trivial sem comportamento observável
+- Testes E2E no escopo do setup inicial

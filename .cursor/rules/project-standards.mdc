@@ -1,0 +1,35 @@
+---
+description: Padrões gerais do projeto portal-noticias-frontend
+alwaysApply: true
+---
+
+# Padrões do Projeto
+
+## Stack
+- Next.js 16 App Router
+- TypeScript strict
+- SASS Modules
+- Yarn 1.22
+- Alias `@/*` → `src/*`
+
+## Princípios obrigatórios
+- **Clean Code**: funções pequenas, nomes expressivos, SRP
+- **TDD**: escrever teste antes da implementação (Red → Green → Refactor)
+- **Server Components por padrão**: fetch via `lib/api` em páginas
+- **Tipagem forte**: tipos em `types/` espelham contratos do backend
+
+## O que evitar
+- Fetch direto em componentes de UI
+- `'use client'` sem interatividade real
+- Misturar Tailwind com SASS Modules
+- Chamar API backend do browser (sem CORS/BFF)
+
+## Regras de dependência
+- `app/` e `components/` importam de `lib/api/` e `types/`
+- `lib/api/` importa de `types/`; não importa de `components/`
+- `types/` não importa de outras camadas
+
+## Ao implementar
+1. Consultar `docs/requisitos-funcionais-nao-funcionais.md`, `docs/SDD.md` e `docs/arquitetura.md`
+2. Criar teste → implementar → refatorar
+3. Manter diff mínimo e focado no escopo pedido

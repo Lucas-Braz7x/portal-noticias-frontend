@@ -1,0 +1,54 @@
+---
+description: Padrões Next.js App Router para o frontend
+globs: "src/**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Next.js — Padrões
+
+## Server vs Client Components
+
+```typescript
+// ✅ Server Component (padrão) — fetch na página
+export default async function Page() {
+  const articles = await listArticles();
+  return <ArticleList articles={articles.data} />;
+}
+
+// ✅ Client Component — só quando há interatividade
+'use client';
+export function SearchInput({ onSearch }: Props) { ... }
+```
+
+## Fetch e API
+
+- Usar `listArticles()` / `getArticleBySlug()` de `lib/api/articles.ts`
+- Nunca chamar `fetch(process.env.API_URL + ...)` direto em componentes
+- `API_URL` é server-only; não expor no client
+- Respostas validadas com Zod em `lib/api/schemas/` via `parseApiResponse`
+- Cache ISR via helpers em `lib/api/cache.ts` (`revalidate` + `tags`)
+
+## Suspense
+
+- Home: `ArticleFiltersSection` e `ArticleListSection` em `app/_components/` com `<Suspense>` e skeletons
+- `loading.tsx` por rota para fallback de navegação
+
+## Rotas e estados (RF11)
+
+| Arquivo | Uso |
+|---------|-----|
+| `loading.tsx` | Suspense fallback |
+| `error.tsx` | Erro de renderização (`'use client'`) |
+| `not-found.tsx` | 404 de rota |
+| `notFound()` | 404 de artigo (`ARTICLE_NOT_FOUND`) |
+
+## Metadata
+
+- `layout.tsx`: metadata global
+- `page.tsx`: `generateMetadata` para detalhe de artigo
+
+## Estilos
+
+- `globals.scss` para reset e tokens CSS
+- `*.module.scss` para estilos de componente
+- Tokens SCSS em `src/styles/_variables.scss`
