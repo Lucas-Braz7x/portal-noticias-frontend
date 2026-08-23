@@ -4,7 +4,11 @@ const PLACEHOLDER_COUNT = 3;
 
 export function ArticleListSkeleton() {
   return (
-    <ul className={styles.list} aria-busy="true" aria-label="Carregando artigos">
+    <ul
+      className={styles.list}
+      aria-busy="true"
+      aria-label="Carregando artigos"
+    >
       {Array.from({ length: PLACEHOLDER_COUNT }, (_, index) => (
         <li key={index} className={styles.item}>
           <div className={styles.card}>

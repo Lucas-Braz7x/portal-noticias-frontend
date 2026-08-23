@@ -7,7 +7,9 @@ export function Footer() {
   return (
     <footer className={styles.footer}>
       <Container>
-        <p className={styles.text}>© {year} Portal de Notícias — Desafio técnico Gazeta do Povo</p>
+        <p className={styles.text}>
+          © {year} Portal de Notícias — Desafio técnico Gazeta do Povo
+        </p>
       </Container>
     </footer>
   );

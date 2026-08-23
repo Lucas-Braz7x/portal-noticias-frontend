@@ -1,7 +1,12 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useTransition, type ChangeEvent, type MouseEvent, type ReactNode } from 'react';
+import {
+  useTransition,
+  type ChangeEvent,
+  type MouseEvent,
+  type ReactNode,
+} from 'react';
 
 import { PAGE_SIZE_OPTIONS } from '@/lib/constants/pagination';
 import { buildArticlesListUrl } from '@/lib/utils/list-params';
@@ -27,14 +32,25 @@ interface PaginationLinkProps {
   onNavigate: (href: string) => void;
 }
 
-function PaginationLink({ href, className, ariaLabel, children, onNavigate }: PaginationLinkProps) {
+function PaginationLink({
+  href,
+  className,
+  ariaLabel,
+  children,
+  onNavigate,
+}: PaginationLinkProps) {
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     onNavigate(href);
   };
 
   return (
-    <a href={href} className={className} aria-label={ariaLabel} onClick={handleClick}>
+    <a
+      href={href}
+      className={className}
+      aria-label={ariaLabel}
+      onClick={handleClick}
+    >
       {children}
     </a>
   );

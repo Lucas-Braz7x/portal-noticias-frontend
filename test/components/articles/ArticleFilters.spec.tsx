@@ -15,7 +15,10 @@ const tags: ReferenceItem[] = [
 ];
 
 const useSearchParams = vi.fn(
-  () => new URLSearchParams('q=inteligencia&category=tecnologia&tag=eleicoes&page=2'),
+  () =>
+    new URLSearchParams(
+      'q=inteligencia&category=tecnologia&tag=eleicoes&page=2',
+    ),
 );
 
 vi.mock('next/navigation', () => ({

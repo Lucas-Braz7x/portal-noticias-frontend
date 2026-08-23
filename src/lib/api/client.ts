@@ -37,7 +37,9 @@ export async function apiFetch<T>(
     const body = await response.json().catch(() => null);
     const parsed = apiErrorBodySchema.safeParse(body);
     const code = parsed.success ? parsed.data.error.code : 'UNKNOWN_ERROR';
-    const message = parsed.success ? parsed.data.error.message : response.statusText;
+    const message = parsed.success
+      ? parsed.data.error.message
+      : response.statusText;
     throw new ApiClientError(code, message, response.status);
   }
 

@@ -8,5 +8,9 @@ interface ContainerProps {
 }
 
 export function Container({ children, className }: ContainerProps) {
-  return <div className={[styles.container, className].filter(Boolean).join(' ')}>{children}</div>;
+  return (
+    <div className={[styles.container, className].filter(Boolean).join(' ')}>
+      {children}
+    </div>
+  );
 }

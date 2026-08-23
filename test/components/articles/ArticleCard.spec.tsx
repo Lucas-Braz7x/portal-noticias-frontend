@@ -21,10 +21,9 @@ describe('ArticleCard', () => {
   it('renders all RF01 fields', () => {
     render(<ArticleCard article={mockArticle} />);
 
-    expect(screen.getByRole('link', { name: 'Título do Artigo' })).toHaveAttribute(
-      'href',
-      '/articles/test-article',
-    );
+    expect(
+      screen.getByRole('link', { name: 'Título do Artigo' }),
+    ).toHaveAttribute('href', '/articles/test-article');
     expect(screen.getByText('Resumo do artigo de teste.')).toBeInTheDocument();
     expect(screen.getByText('Maria Silva')).toBeInTheDocument();
     expect(screen.getByText('Tecnologia')).toBeInTheDocument();

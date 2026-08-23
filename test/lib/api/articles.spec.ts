@@ -37,7 +37,10 @@ describe('articles API', () => {
       }),
     );
 
-    const result = await listArticles({ page: 1, limit: 10 }, { next: { revalidate: 0 } });
+    const result = await listArticles(
+      { page: 1, limit: 10 },
+      { next: { revalidate: 0 } },
+    );
 
     expect(fetch).toHaveBeenCalledWith(
       'http://localhost:3000/api/v1/articles?page=1&limit=10',
@@ -53,13 +56,14 @@ describe('articles API', () => {
       'fetch',
       vi.fn().mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve({ data: [{ slug: 'only-slug' }], meta: {} }),
+        json: () =>
+          Promise.resolve({ data: [{ slug: 'only-slug' }], meta: {} }),
       }),
     );
 
-    await expect(listArticles({}, { next: { revalidate: 0 } })).rejects.toBeInstanceOf(
-      ApiValidationError,
-    );
+    await expect(
+      listArticles({}, { next: { revalidate: 0 } }),
+    ).rejects.toBeInstanceOf(ApiValidationError);
   });
 
   it('getArticleBySlug throws ApiClientError on ARTICLE_NOT_FOUND', async () => {
@@ -71,15 +75,20 @@ describe('articles API', () => {
         statusText: 'Not Found',
         json: () =>
           Promise.resolve({
-            error: { code: 'ARTICLE_NOT_FOUND', message: 'Artigo não encontrado' },
+            error: {
+              code: 'ARTICLE_NOT_FOUND',
+              message: 'Artigo não encontrado',
+            },
           }),
       }),
     );
 
-    await expect(getArticleBySlug('missing', { next: { revalidate: 0 } })).rejects.toBeInstanceOf(
-      ApiClientError,
-    );
-    await expect(getArticleBySlug('missing', { next: { revalidate: 0 } })).rejects.toMatchObject({
+    await expect(
+      getArticleBySlug('missing', { next: { revalidate: 0 } }),
+    ).rejects.toBeInstanceOf(ApiClientError);
+    await expect(
+      getArticleBySlug('missing', { next: { revalidate: 0 } }),
+    ).rejects.toMatchObject({
       code: 'ARTICLE_NOT_FOUND',
       status: 404,
       message: 'Artigo não encontrado',

@@ -29,7 +29,11 @@ describe('ArticleList', () => {
   it('renders a card for each article', () => {
     render(<ArticleList articles={articles} />);
 
-    expect(screen.getByRole('link', { name: 'Primeiro Artigo' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Segundo Artigo' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Primeiro Artigo' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Segundo Artigo' }),
+    ).toBeInTheDocument();
   });
 });

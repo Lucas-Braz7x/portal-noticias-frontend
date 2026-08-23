@@ -27,11 +27,26 @@ describe('parseListSearchParams', () => {
   });
 
   it('defaults page and limit when missing or invalid', () => {
-    expect(parseListSearchParams({})).toEqual({ page: 1, limit: DEFAULT_PAGE_LIMIT });
-    expect(parseListSearchParams({ page: '0' })).toEqual({ page: 1, limit: DEFAULT_PAGE_LIMIT });
-    expect(parseListSearchParams({ page: 'abc' })).toEqual({ page: 1, limit: DEFAULT_PAGE_LIMIT });
-    expect(parseListSearchParams({ limit: '0' })).toEqual({ page: 1, limit: DEFAULT_PAGE_LIMIT });
-    expect(parseListSearchParams({ limit: '99' })).toEqual({ page: 1, limit: DEFAULT_PAGE_LIMIT });
+    expect(parseListSearchParams({})).toEqual({
+      page: 1,
+      limit: DEFAULT_PAGE_LIMIT,
+    });
+    expect(parseListSearchParams({ page: '0' })).toEqual({
+      page: 1,
+      limit: DEFAULT_PAGE_LIMIT,
+    });
+    expect(parseListSearchParams({ page: 'abc' })).toEqual({
+      page: 1,
+      limit: DEFAULT_PAGE_LIMIT,
+    });
+    expect(parseListSearchParams({ limit: '0' })).toEqual({
+      page: 1,
+      limit: DEFAULT_PAGE_LIMIT,
+    });
+    expect(parseListSearchParams({ limit: '99' })).toEqual({
+      page: 1,
+      limit: DEFAULT_PAGE_LIMIT,
+    });
   });
 
   it('ignores empty strings', () => {
@@ -64,18 +79,24 @@ describe('buildArticlesListUrl', () => {
   });
 
   it('omits page 1 and default limit from url', () => {
-    expect(buildArticlesListUrl({ q: 'ia', page: 1, limit: DEFAULT_PAGE_LIMIT })).toBe('/?q=ia');
+    expect(
+      buildArticlesListUrl({ q: 'ia', page: 1, limit: DEFAULT_PAGE_LIMIT }),
+    ).toBe('/?q=ia');
   });
 
   it('returns root path when no params', () => {
     expect(buildArticlesListUrl({})).toBe('/');
-    expect(buildArticlesListUrl({ page: 1, limit: DEFAULT_PAGE_LIMIT })).toBe('/');
+    expect(buildArticlesListUrl({ page: 1, limit: DEFAULT_PAGE_LIMIT })).toBe(
+      '/',
+    );
   });
 });
 
 describe('buildListFiltersKey', () => {
   it('builds stable key from filter params', () => {
-    expect(buildListFiltersKey({ q: 'ia', category: 'tech', tag: 'js' })).toBe('ia|tech|js');
+    expect(buildListFiltersKey({ q: 'ia', category: 'tech', tag: 'js' })).toBe(
+      'ia|tech|js',
+    );
     expect(buildListFiltersKey({})).toBe('||');
   });
 });

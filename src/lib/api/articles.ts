@@ -1,8 +1,16 @@
-import type { ArticleDetail, ArticleSummary, ListArticlesParams, PaginatedResponse } from '@/types/article';
+import type {
+  ArticleDetail,
+  ArticleSummary,
+  ListArticlesParams,
+  PaginatedResponse,
+} from '@/types/article';
 
 import { articlesCacheOptions } from './cache';
 import { apiFetch, type FetchOptions } from './client';
-import { articleDetailSchema, paginatedArticlesSchema } from './schemas/article';
+import {
+  articleDetailSchema,
+  paginatedArticlesSchema,
+} from './schemas/article';
 
 function buildQuery(params: ListArticlesParams): string {
   const searchParams = new URLSearchParams();
@@ -32,8 +40,12 @@ export async function getArticleBySlug(
   slug: string,
   options?: FetchOptions,
 ): Promise<ArticleDetail> {
-  return apiFetch<ArticleDetail>(`/articles/${encodeURIComponent(slug)}`, articleDetailSchema, {
-    ...articlesCacheOptions(),
-    ...options,
-  });
+  return apiFetch<ArticleDetail>(
+    `/articles/${encodeURIComponent(slug)}`,
+    articleDetailSchema,
+    {
+      ...articlesCacheOptions(),
+      ...options,
+    },
+  );
 }

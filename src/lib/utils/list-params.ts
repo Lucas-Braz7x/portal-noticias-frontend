@@ -1,7 +1,4 @@
-import {
-  DEFAULT_PAGE_LIMIT,
-  MAX_PAGE_LIMIT,
-} from '@/lib/constants/pagination';
+import { DEFAULT_PAGE_LIMIT, MAX_PAGE_LIMIT } from '@/lib/constants/pagination';
 import type { ListArticlesParams } from '@/types/article';
 
 type RawSearchParams = Record<string, string | string[] | undefined>;
@@ -32,7 +29,9 @@ function parseLimit(raw: RawSearchParams): number {
   return limit;
 }
 
-export function parseListSearchParams(raw: RawSearchParams): ListArticlesParams {
+export function parseListSearchParams(
+  raw: RawSearchParams,
+): ListArticlesParams {
   const params: ListArticlesParams = {
     page: parsePage(raw),
     limit: parseLimit(raw),

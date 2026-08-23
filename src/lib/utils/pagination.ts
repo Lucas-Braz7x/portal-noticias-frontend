@@ -13,7 +13,11 @@ export function getVisiblePageNumbers(
   pages.add(1);
   pages.add(totalPages);
 
-  for (let page = current - siblingCount; page <= current + siblingCount; page += 1) {
+  for (
+    let page = current - siblingCount;
+    page <= current + siblingCount;
+    page += 1
+  ) {
     if (page >= 1 && page <= totalPages) {
       pages.add(page);
     }

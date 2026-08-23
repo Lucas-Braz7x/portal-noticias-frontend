@@ -7,14 +7,19 @@ import { BackToTop } from '@/components/ui/BackToTop';
 import { EmptyState } from '@/components/ui/EmptyState';
 import emptyStateStyles from '@/components/ui/EmptyState.module.scss';
 import { listArticles } from '@/lib/api/articles';
-import { buildArticlesListUrl, parseListSearchParams } from '@/lib/utils/list-params';
+import {
+  buildArticlesListUrl,
+  parseListSearchParams,
+} from '@/lib/utils/list-params';
 import type { ListArticlesParams } from '@/types/article';
 
 interface ArticleListSectionProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export async function ArticleListSection({ searchParams }: ArticleListSectionProps) {
+export async function ArticleListSection({
+  searchParams,
+}: ArticleListSectionProps) {
   const currentParams = parseListSearchParams(await searchParams);
   const page = currentParams.page ?? 1;
   const limit = currentParams.limit ?? 10;
@@ -24,7 +29,9 @@ export async function ArticleListSection({ searchParams }: ArticleListSectionPro
     redirect(buildArticlesListUrl({ ...currentParams, page: meta.totalPages }));
   }
 
-  const hasActiveFilters = Boolean(currentParams.q || currentParams.category || currentParams.tag);
+  const hasActiveFilters = Boolean(
+    currentParams.q || currentParams.category || currentParams.tag,
+  );
   const listParams: ListArticlesParams = {
     q: currentParams.q,
     category: currentParams.category,
@@ -35,7 +42,11 @@ export async function ArticleListSection({ searchParams }: ArticleListSectionPro
   if (data.length === 0) {
     return (
       <EmptyState
-        title={hasActiveFilters ? 'Nenhum artigo encontrado' : 'Nenhum artigo publicado'}
+        title={
+          hasActiveFilters
+            ? 'Nenhum artigo encontrado'
+            : 'Nenhum artigo publicado'
+        }
         description={
           hasActiveFilters
             ? 'Tente ajustar os termos de busca ou remover alguns filtros.'

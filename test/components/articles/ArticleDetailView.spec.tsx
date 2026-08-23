@@ -19,10 +19,16 @@ describe('ArticleDetailView', () => {
   it('renders title and content', () => {
     render(<ArticleDetailView article={mockArticle} />);
 
-    expect(screen.getByRole('heading', { name: 'Título Completo' })).toBeInTheDocument();
-    expect(screen.getByText('Conteúdo completo do artigo.')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Título Completo' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Conteúdo completo do artigo.'),
+    ).toBeInTheDocument();
     expect(screen.getByText('Maria Silva')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Voltar para a home' })).toHaveAttribute('href', '/');
+    expect(
+      screen.getByRole('link', { name: 'Voltar para a home' }),
+    ).toHaveAttribute('href', '/');
     expect(screen.getByText('Voltar')).toBeInTheDocument();
   });
 });

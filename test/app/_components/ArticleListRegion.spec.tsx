@@ -11,9 +11,9 @@ vi.mock('next/navigation', () => ({
 }));
 
 vi.mock('@/lib/utils/article-list-region', async () => {
-  const actual = await vi.importActual<typeof import('@/lib/utils/article-list-region')>(
-    '@/lib/utils/article-list-region',
-  );
+  const actual = await vi.importActual<
+    typeof import('@/lib/utils/article-list-region')
+  >('@/lib/utils/article-list-region');
 
   return {
     ...actual,

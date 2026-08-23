@@ -5,7 +5,10 @@ import { useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 
 import { DEFAULT_PAGE_LIMIT } from '@/lib/constants/pagination';
-import { buildListFiltersKey, parseListSearchParams } from '@/lib/utils/list-params';
+import {
+  buildListFiltersKey,
+  parseListSearchParams,
+} from '@/lib/utils/list-params';
 import type { ReferenceItem } from '@/types/article';
 
 import styles from './ArticleFilters.module.scss';
@@ -21,12 +24,15 @@ export function ArticleFilters({ categories, tags }: ArticleFiltersProps) {
     () => parseListSearchParams(Object.fromEntries(searchParams.entries())),
     [searchParams],
   );
-  const hasActiveFilters = Boolean(currentParams.q || currentParams.category || currentParams.tag);
+  const hasActiveFilters = Boolean(
+    currentParams.q || currentParams.category || currentParams.tag,
+  );
   const formKey = buildListFiltersKey(currentParams);
 
   return (
     <form key={formKey} className={styles.filters} method="GET" action="/">
-      {currentParams.limit != null && currentParams.limit !== DEFAULT_PAGE_LIMIT ? (
+      {currentParams.limit != null &&
+      currentParams.limit !== DEFAULT_PAGE_LIMIT ? (
         <input type="hidden" name="limit" value={currentParams.limit} />
       ) : null}
       <div className={styles.field}>
@@ -92,7 +98,13 @@ export function ArticleFilters({ categories, tags }: ArticleFiltersProps) {
             aria-label="Limpar filtros"
             data-tooltip="Limpar filtros"
           >
-            <svg className={styles.clearIcon} viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <svg
+              className={styles.clearIcon}
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              aria-hidden="true"
+            >
               <path
                 fill="currentColor"
                 d="M12.5 8c-2.65 0-5.05 1.04-6.9 2.7L2 7v9h9l-2.91-2.91C8.97 13.67 10.66 13 12.5 13c3.04 0 5.5 2.46 5.5 5.5h2C20 11.36 16.64 8 12.5 8z"

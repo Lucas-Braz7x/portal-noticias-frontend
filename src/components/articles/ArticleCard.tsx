@@ -2,7 +2,10 @@ import Link from 'next/link';
 
 import { formatPublishedAt } from '@/lib/utils/format-date';
 import { buildArticlesListUrl } from '@/lib/utils/list-params';
-import { ARTICLE_SUMMARY_MAX_LENGTH, truncateText } from '@/lib/utils/truncate-text';
+import {
+  ARTICLE_SUMMARY_MAX_LENGTH,
+  truncateText,
+} from '@/lib/utils/truncate-text';
 import type { ArticleSummary } from '@/types/article';
 
 import styles from './ArticleCard.module.scss';
@@ -42,7 +45,10 @@ export function ArticleCard({ article }: ArticleCardProps) {
             <ul className={styles.tags} aria-label="Tags">
               {article.tags.map((tag) => (
                 <li key={tag.slug}>
-                  <Link href={buildArticlesListUrl({ tag: tag.slug })} className={styles.tag}>
+                  <Link
+                    href={buildArticlesListUrl({ tag: tag.slug })}
+                    className={styles.tag}
+                  >
                     {tag.name}
                   </Link>
                 </li>

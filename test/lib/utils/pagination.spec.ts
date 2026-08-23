@@ -14,7 +14,15 @@ describe('getVisiblePageNumbers', () => {
   });
 
   it('shows ellipsis around the current page in large sets', () => {
-    expect(getVisiblePageNumbers(5, 10)).toEqual([1, 'ellipsis', 4, 5, 6, 'ellipsis', 10]);
+    expect(getVisiblePageNumbers(5, 10)).toEqual([
+      1,
+      'ellipsis',
+      4,
+      5,
+      6,
+      'ellipsis',
+      10,
+    ]);
     expect(getVisiblePageNumbers(1, 10)).toEqual([1, 2, 'ellipsis', 10]);
     expect(getVisiblePageNumbers(10, 10)).toEqual([1, 'ellipsis', 9, 10]);
   });

@@ -19,6 +19,8 @@ describe('ThemeToggle', () => {
 
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
     expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark');
-    expect(screen.getByRole('button', { name: 'Ativar tema claro' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Ativar tema claro' }),
+    ).toBeInTheDocument();
   });
 });
