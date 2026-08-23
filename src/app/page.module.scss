@@ -1,0 +1,22 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.hero {
+  padding-top: clamp(1.5rem, 4vw, 2.5rem);
+  padding-bottom: $spacing-xl;
+  margin-bottom: $spacing-xl;
+  border-bottom: 1px solid $color-border;
+}
+
+.title {
+  margin-bottom: $spacing-sm;
+  font-weight: 700;
+  @include fluid-heading(1.75rem, 4vw, 2.5rem);
+}
+
+.subtitle {
+  max-width: 40rem;
+  font-size: $font-size-lead;
+  color: $color-muted;
+  line-height: 1.65;
+}

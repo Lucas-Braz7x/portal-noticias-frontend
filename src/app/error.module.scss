@@ -1,0 +1,24 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.retry {
+  margin-top: $spacing-md;
+  display: inline-flex;
+  align-items: center;
+  min-height: $touch-target-min;
+  padding: $spacing-sm $spacing-lg;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1px solid $color-border;
+  border-radius: $border-radius;
+  background: $color-background;
+  color: $color-foreground;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $color-accent;
+    color: $color-accent;
+  }
+
+  @include interactive-focus;
+}

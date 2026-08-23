@@ -1,0 +1,64 @@
+@use '../styles/variables' as *;
+
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+  --color-background: #f4f5f7;
+  --color-foreground: #1c1f26;
+  --color-muted: #5c6370;
+  --color-border: #e2e5eb;
+  --color-accent: #1d4ed8;
+  --color-accent-hover: #1e40af;
+  --color-error: #b91c1c;
+  --color-surface: #eceef2;
+  --shadow-color: rgb(15 23 42 / 0.07);
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --color-background: #16181d;
+  --color-foreground: #e8eaed;
+  --color-muted: #9aa3b2;
+  --color-border: #2d323c;
+  --color-accent: #6ba3f7;
+  --color-accent-hover: #93c5fd;
+  --color-error: #f87171;
+  --color-surface: #1e2128;
+  --shadow-color: rgb(0 0 0 / 0.35);
+}
+
+html {
+  height: 100%;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  color: $color-foreground;
+  background: $color-background;
+  font-family: $font-sans;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+main {
+  flex: 1;
+}

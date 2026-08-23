@@ -1,0 +1,6 @@
+@use '../../styles/variables' as *;
+
+.region {
+  margin-bottom: $spacing-xl;
+  scroll-margin-top: 1rem;
+}
