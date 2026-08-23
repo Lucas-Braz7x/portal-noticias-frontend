@@ -1,0 +1,56 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.button {
+  position: fixed;
+  right: $spacing-md;
+  bottom: $spacing-md;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $touch-target-min;
+  height: $touch-target-min;
+  border: 1px solid color-mix(in srgb, $color-border 80%, transparent);
+  border-radius: 999px;
+  background: $color-background;
+  color: $color-foreground;
+  box-shadow: $shadow-md;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.5rem);
+  transition:
+    opacity $transition-base,
+    visibility $transition-base,
+    transform $transition-base,
+    border-color $transition-fast,
+    color $transition-fast;
+
+  @include interactive-focus;
+}
+
+.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.button:hover {
+  border-color: $color-accent;
+  color: $color-accent;
+}
+
+.icon {
+  display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition:
+      opacity $transition-fast,
+      visibility $transition-fast,
+      border-color $transition-fast,
+      color $transition-fast;
+  }
+}

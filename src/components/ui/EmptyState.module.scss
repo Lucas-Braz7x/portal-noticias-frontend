@@ -1,0 +1,39 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-sm;
+  padding-block: $spacing-2xl;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.description {
+  max-width: 28rem;
+  color: $color-muted;
+  line-height: 1.6;
+}
+
+.action {
+  margin-top: $spacing-sm;
+}
+
+.actionLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: $touch-target-min;
+  color: $color-accent;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  @include interactive-focus;
+}

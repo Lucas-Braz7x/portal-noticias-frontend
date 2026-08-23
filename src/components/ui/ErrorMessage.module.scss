@@ -1,0 +1,20 @@
+@use '../../styles/variables' as *;
+
+.error {
+  padding: $spacing-lg;
+  border: 1px solid $color-error;
+  border-radius: $border-radius;
+  background: color-mix(in srgb, $color-error 8%, transparent);
+}
+
+.title {
+  margin-bottom: $spacing-xs;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: $color-error;
+}
+
+.message {
+  color: $color-foreground;
+  line-height: 1.6;
+}

@@ -1,0 +1,59 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.skeleton {
+  border-radius: $border-radius;
+  background: $color-border;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.filters {
+  display: grid;
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+  padding: $spacing-lg;
+  border: 1px solid $color-border;
+  border-radius: $border-radius;
+  background: $color-background;
+
+  @include respond-from(md) {
+    grid-template-columns: 1fr 1fr 1fr auto;
+    align-items: end;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.label {
+  width: 4rem;
+  height: 0.875rem;
+}
+
+.input {
+  height: 2.75rem;
+}
+
+.button {
+  width: 5rem;
+  height: 2.75rem;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
