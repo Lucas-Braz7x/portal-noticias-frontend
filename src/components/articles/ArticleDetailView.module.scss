@@ -1,0 +1,109 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.article {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  padding-block: clamp(1.5rem, 4vw, 2.5rem);
+  max-width: clamp(36rem, 90vw, 48rem);
+  margin-inline: auto;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  min-height: $touch-target-min;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: $color-muted;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $color-accent;
+  }
+
+  @include interactive-focus;
+}
+
+.backIcon {
+  display: block;
+  flex-shrink: 0;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  padding-bottom: $spacing-lg;
+  border-bottom: 1px solid $color-border;
+}
+
+.category {
+  padding: $spacing-xs $spacing-sm;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: $color-accent;
+  background: $color-surface;
+  border-radius: 999px;
+  align-self: flex-start;
+  transition:
+    background-color $transition-fast,
+    color $transition-fast;
+
+  &:hover {
+    background: color-mix(in srgb, $color-accent 12%, $color-surface);
+  }
+
+  @include interactive-focus;
+}
+
+.title {
+  font-weight: 700;
+  @include fluid-heading(1.75rem, 5vw, 2.75rem);
+}
+
+.meta {
+  @include meta-row;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+  list-style: none;
+}
+
+.tag {
+  padding: $spacing-xs $spacing-sm;
+  font-size: 0.75rem;
+  border: 1px solid $color-border;
+  border-radius: 999px;
+  color: $color-muted;
+  transition:
+    border-color $transition-fast,
+    color $transition-fast,
+    background-color $transition-fast;
+
+  &:hover {
+    border-color: color-mix(in srgb, $color-accent 40%, $color-border);
+    color: $color-accent;
+    background: color-mix(in srgb, $color-accent 6%, transparent);
+  }
+
+  @include interactive-focus;
+}
+
+.summary {
+  font-size: clamp(1.0625rem, 2vw, 1.25rem);
+  color: $color-muted;
+  line-height: 1.65;
+  font-weight: 400;
+}
+
+.content {
+  @include prose;
+}

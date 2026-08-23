@@ -1,0 +1,126 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.filters {
+  display: grid;
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+  padding: $spacing-lg;
+  border-radius: $radius-lg;
+  background: $color-surface;
+  border-bottom: 1px solid $color-border;
+
+  @include respond-from(md) {
+    grid-template-columns: 1fr 1fr 1fr auto;
+    align-items: end;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.input,
+.select {
+  padding: $spacing-sm $spacing-md;
+  font-size: 1rem;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  background: $color-background;
+  color: $color-foreground;
+
+  @include input-focus-glow;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.submit {
+  min-height: $touch-target-min;
+  padding: $spacing-sm $spacing-lg;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  border-radius: $radius-md;
+  background: $color-accent;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: $shadow-sm;
+
+  @include motion-safe-lift;
+
+  &:hover {
+    background: $color-accent-hover;
+  }
+
+  @include interactive-focus;
+}
+
+.clear {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: $touch-target-min;
+  min-height: $touch-target-min;
+  color: $color-muted;
+  border-radius: $radius-md;
+  transition:
+    color $transition-fast,
+    background-color $transition-fast;
+
+  &:hover,
+  &:focus-visible {
+    color: $color-accent;
+    background: color-mix(in srgb, $color-accent 8%, transparent);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+  }
+
+  &::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + #{$spacing-xs});
+    left: 50%;
+    z-index: 10;
+    padding: $spacing-xs $spacing-sm;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    color: $color-foreground;
+    white-space: nowrap;
+    background: $color-background;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    box-shadow: $shadow-sm;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, 4px);
+    transition:
+      opacity $transition-fast,
+      visibility $transition-fast,
+      transform $transition-fast;
+    pointer-events: none;
+  }
+
+  @include interactive-focus;
+}
+
+.clearIcon {
+  display: block;
+}

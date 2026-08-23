@@ -1,0 +1,115 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.pagination {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-top: $spacing-lg;
+  padding-top: $spacing-md;
+  border-top: 1px solid color-mix(in srgb, $color-border 70%, transparent);
+}
+
+.pageSize {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.pageSizeLabel {
+  font-size: 0.75rem;
+  color: $color-muted;
+}
+
+.pageSizeSelect {
+  height: 1.75rem;
+  padding: 0 $spacing-sm;
+  font-size: 0.8125rem;
+  color: $color-foreground;
+  border: 1px solid color-mix(in srgb, $color-border 80%, transparent);
+  border-radius: $radius-sm;
+  background: $color-background;
+
+  @include input-focus-glow;
+}
+
+.summary {
+  margin: 0;
+  font-size: 0.75rem;
+  color: $color-muted;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.control,
+.page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  padding: 0 $spacing-xs;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: $color-muted;
+  text-decoration: none;
+  border: none;
+  border-radius: $radius-sm;
+  background: transparent;
+  transition:
+    color $transition-fast,
+    background-color $transition-fast;
+}
+
+.control {
+  padding-inline: $spacing-sm;
+  min-width: auto;
+}
+
+.control:hover,
+.page:hover {
+  color: $color-foreground;
+  background: color-mix(in srgb, $color-border 35%, transparent);
+}
+
+.current {
+  color: $color-accent;
+  background: color-mix(in srgb, $color-accent 12%, transparent);
+}
+
+.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.75rem;
+  font-size: 0.8125rem;
+  color: $color-muted;
+}
+
+@include respond-from(md) {
+  .pagination {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .summary {
+    order: 0;
+  }
+}
