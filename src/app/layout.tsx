@@ -20,6 +20,8 @@ export const metadata: Metadata = {
   description: 'Portal de notícias e artigos — desafio técnico Gazeta do Povo',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
     <html lang="pt-BR" className={geistSans.variable} suppressHydrationWarning>

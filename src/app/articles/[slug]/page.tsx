@@ -10,7 +10,9 @@ interface ArticlePageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
 
   try {
@@ -30,17 +32,19 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
 
+  let article;
   try {
-    const article = await getArticleBySlug(slug);
-    return (
-      <Container>
-        <ArticleDetailView article={article} />
-      </Container>
-    );
+    article = await getArticleBySlug(slug);
   } catch (error) {
     if (error instanceof ApiClientError && error.code === 'ARTICLE_NOT_FOUND') {
       notFound();
     }
     throw error;
   }
+
+  return (
+    <Container>
+      <ArticleDetailView article={article} />
+    </Container>
+  );
 }
