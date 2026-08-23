@@ -45,10 +45,14 @@ Os arquivos em `docs/` foram redigidos com auxílio de IA e revisados manualment
 
 ---
 
-## 5. Próximos passos
+## 5. Próximos passos opcionais
 
-Implementação das features RF01–RF06 com o mesmo fluxo: consultar docs → teste → implementação → revisão.
+- Open Graph / metadata avançada com `NEXT_PUBLIC_SITE_URL`
+- Debounce na busca
+- Vitest no CI (além do E2E já configurado)
+- Artigos relacionados no detalhe
+- Imagens nos cards
 
 ---
 
-*Versão: 1.0 — Agosto/2026*
+*Versão: 1.1 — Agosto/2026*

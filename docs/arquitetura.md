@@ -54,6 +54,7 @@ flowchart TB
 ### 2.1 App Router (`src/app/`)
 
 - **Pages** — Server Components que buscam dados e compõem a UI.
+- **`_components/`** — seções async da home (`HomeHero`, `ArticleFiltersSection`, `ArticleListSection`) e wrapper client `ArticleListRegion`.
 - **Layouts** — shell global (header, footer, metadata).
 - **loading.tsx / error.tsx / not-found.tsx** — estados da interface (RF11).
 
@@ -65,7 +66,7 @@ flowchart TB
 |-------|------------------|
 | `layout/` | Header, Footer, Container — estrutura da página |
 | `articles/` | ArticleList, ArticleCard, ArticleFilters, Pagination, ArticleDetailView |
-| `ui/` | EmptyState, ErrorMessage, Spinner — estados reutilizáveis |
+| `ui/` | EmptyState, ErrorMessage, Spinner, skeletons — estados reutilizáveis |
 
 **Regra:** componentes de UI são apresentacionais; sem lógica de API.
 
@@ -78,8 +79,10 @@ flowchart TB
 | `api/schemas/` | Schemas Zod dos contratos da API |
 | `api/cache.ts` | Tags e `revalidate` por recurso |
 | `api/articles.ts` | `listArticles`, `getArticleBySlug` |
-| `utils/` | `list-params`, `format-date` — helpers de URL e formatação |
-| `constants/filters.ts` | Categorias e tags para filtros |
+| `api/categories.ts` | `listCategories` |
+| `api/tags.ts` | `listTags` |
+| `constants/pagination.ts` | `DEFAULT_PAGE_LIMIT`, `PAGE_SIZE_OPTIONS` |
+| `utils/` | `list-params`, `pagination`, `article-list-region`, `format-date`, `truncate-text` |
 
 ### 2.4 Types (`src/types/`)
 
@@ -108,8 +111,9 @@ Schemas em `src/lib/api/schemas/article.ts` espelham o [SDD do backend](../porta
 
 | Cenário | Abordagem |
 |---------|-----------|
-| Listagem / detalhe | Server Component → `lib/api` → `fetch` com `API_URL` |
-| Busca com debounce (futuro) | Route Handler BFF ou CORS no backend |
+| Listagem / detalhe / filtros | Server Component → `lib/api` → `fetch` com `API_URL` |
+| Troca de página na home | `Pagination` (client) navega via `router.push` sem scroll; `ArticleListRegion` rola até a listagem |
+| Busca com debounce (futuro) | CORS no backend ou debounce client-side no formulário |
 | Cache ISR | `next.revalidate` + `tags` via helpers em `lib/api/cache.ts` |
 
 ### Cache por recurso
@@ -132,10 +136,18 @@ A home usa `<Suspense>` por seção para streaming independente:
 
 | Seção | Componente async | Fallback |
 |-------|------------------|----------|
-| Filtros | `ArticleFiltersSection` | `ArticleFiltersSkeleton` |
-| Listagem | `ArticleListSection` | `ArticleListSkeleton` |
+| Filtros | `ArticleFiltersSection` (em `page.tsx`) | `ArticleFiltersSkeleton` |
+| Listagem | `ArticleListSection` (em `page.tsx`) | `ArticleListSkeleton` |
 
 `loading.tsx` na raiz permanece como fallback de navegação entre rotas.
+
+### Paginação numerada (RF02)
+
+- `ArticleListSection` busca a página indicada por `?page=` (default `1`) e `?limit=` via `listArticles()`.
+- `Pagination` renderiza controles Anterior/Próxima, números de página e seletor de itens por página.
+- `ArticleListRegion` envolve a listagem e faz scroll suave até o topo dos cards ao trocar de página.
+- Filtros (`q`, `category`, `tag`) são preservados na URL ao trocar de página; submit do formulário reseta para página 1.
+- Página fora do intervalo (`?page=99`) redireciona para a última página válida.
 
 ---
 
@@ -144,10 +156,10 @@ A home usa `<Suspense>` por seção para streaming independente:
 ```
 src/
 ├── app/
-│   ├── _components/      # Server Components async por seção (Suspense)
+│   ├── _components/      # Seções da home (Server + ArticleListRegion client)
 │   ├── layout.tsx
 │   ├── page.tsx
-│   ├── page.module.scss
+│   ├── page.module.scss  # estilos do HomeHero
 │   ├── loading.tsx
 │   ├── error.tsx
 │   ├── error.module.scss
@@ -170,6 +182,7 @@ src/
 │   │   ├── categories.ts
 │   │   └── tags.ts
 │   ├── constants/
+│   │   └── pagination.ts
 │   └── utils/
 ├── types/
 └── styles/
@@ -178,20 +191,29 @@ src/
 
 test/
 ├── setup.ts
+├── app/
+│   └── _components/
+│       └── ArticleListRegion.spec.tsx
 ├── lib/
 │   ├── api/
 │   │   ├── parse.spec.ts
-│   │   └── articles.spec.ts
+│   │   ├── articles.spec.ts
+│   │   ├── categories.spec.ts
+│   │   └── tags.spec.ts
 │   └── utils/
 │       ├── list-params.spec.ts
-│       └── format-date.spec.ts
+│       ├── pagination.spec.ts
+│       ├── format-date.spec.ts
+│       └── truncate-text.spec.ts
 └── components/
-    └── articles/
-        ├── ArticleList.spec.tsx
-        ├── ArticleCard.spec.tsx
-        ├── ArticleFilters.spec.tsx
-        ├── Pagination.spec.tsx
-        └── ArticleDetailView.spec.tsx
+    ├── articles/
+    │   ├── ArticleList.spec.tsx
+    │   ├── ArticleCard.spec.tsx
+    │   ├── ArticleFilters.spec.tsx
+    │   ├── Pagination.spec.tsx
+    │   └── ArticleDetailView.spec.tsx
+    └── layout/
+        └── ThemeToggle.spec.tsx
 
 e2e/                      # Playwright E2E (backend real + seed)
 ├── home.spec.ts
@@ -208,9 +230,22 @@ e2e/                      # Playwright E2E (backend real + seed)
 | API client + Zod | `test/lib/api/` | Vitest + mock de `fetch` |
 | Utils | `test/lib/utils/` | Vitest |
 | Componentes | `test/components/` | Vitest + Testing Library |
-| E2E (RF01–RF06, RF11) | `e2e/` | Playwright + backend real |
+| E2E (RF01–RF06, RF11) | `e2e/` | Playwright + backend real (local) |
 
-**Comandos:** `yarn test` (unitário), `yarn test:watch` (desenvolvimento), `yarn test:e2e` (E2E).
+**Comandos:**
+
+```bash
+yarn test              # unitários (pre-commit)
+yarn test:cov          # unitários + cobertura (mínimo global 75%)
+yarn test:watch        # unitários em modo interativo
+yarn test:e2e          # E2E — apenas local
+```
+
+**Cobertura unitária:** threshold global de **75%** (branches, functions, lines, statements) configurado em `vitest.config.ts`. Exclusões: `src/app/**` (páginas/layouts — E2E local) e `src/types/**` (tipos).
+
+**Pre-commit (Husky):** `yarn lint`, `yarn format:check` e `yarn test:cov`.
+
+**CI (GitHub Actions):** jobs `quality`, `unit` e `build` em [`.github/workflows/ci.yml`](../.github/workflows/ci.yml). E2E **não** roda no CI.
 
 **Pré-requisito E2E:** backend com docker-compose, migrations e seed rodando em `localhost:3000`.
 
@@ -226,10 +261,10 @@ Padrão **mobile-first** com SASS Modules. Breakpoints, mixin `respond-from` e c
 
 - Chamar a API diretamente em componentes de UI
 - `'use client'` sem necessidade de interatividade
-- Fetch client-side para a API backend (sem CORS/BFF)
+- Fetch client-side para a API backend (sem CORS)
 - Misturar Tailwind com SASS Modules
 - Media queries `max-width` ou breakpoints fora dos tokens do projeto
 
 ---
 
-*Versão: 1.1 — Agosto/2026*
+*Versão: 1.2 — Agosto/2026*

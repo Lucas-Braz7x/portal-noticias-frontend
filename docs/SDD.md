@@ -14,7 +14,7 @@ Mapa entre requisitos do edital e implementação neste repositório (frontend).
 | Requisito | Status | Implementação |
 |-----------|--------|---------------|
 | [RF01](./requisitos-funcionais-nao-funcionais.md#rf01--listagem-de-artigos) | ✅ | `/` — `ArticleList` + `ArticleCard` via `listArticles()` |
-| [RF02](./requisitos-funcionais-nao-funcionais.md#rf02--paginação) | ✅ | `Pagination` na home com `meta` da API |
+| [RF02](./requisitos-funcionais-nao-funcionais.md#rf02--paginação) | ✅ | `Pagination` numerada na home (`?page=`) com `meta` da API |
 | [RF03](./requisitos-funcionais-nao-funcionais.md#rf03--busca-textual) | ✅ | `ArticleFilters` — campo `q` via form GET |
 | [RF04](./requisitos-funcionais-nao-funcionais.md#rf04--filtro-por-categoria) | ✅ | `ArticleFilters` — select `category` (slug) |
 | [RF05](./requisitos-funcionais-nao-funcionais.md#rf05--filtro-por-tag) | ✅ | `ArticleFilters` — select `tag` (slug) |
@@ -55,7 +55,7 @@ Legenda: ✅ implementado · 🔜 planejado · — fora deste repo
 
 | Rota | RF | Status no setup |
 |------|----|-----------------|
-| `/` | RF01–RF05 | ✅ Listagem, busca, filtros e paginação |
+| `/` | RF01–RF05 | ✅ Listagem, busca, filtros e paginação numerada (`?page=`) |
 | `/articles/[slug]` | RF06 | ✅ Detalhe do artigo |
 | `loading.tsx` / `error.tsx` / `not-found.tsx` | RF11 | ✅ Estados da interface |
 
@@ -104,7 +104,7 @@ interface ApiError { error: { code, message } }
 | Variável | Uso |
 |----------|-----|
 | `API_URL` | Server Components — base da API backend |
-| `NEXT_PUBLIC_SITE_URL` | URLs absolutas e SEO |
+| `NEXT_PUBLIC_SITE_URL` | URL pública do frontend (reservado para metadata/SEO) |
 
 ---
 
