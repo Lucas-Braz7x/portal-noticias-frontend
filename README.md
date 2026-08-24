@@ -44,6 +44,11 @@ cp .env.example .env
 | ---------------------- | ----------------------- | ------------------------------ |
 | `API_URL`              | Base URL da API backend | `http://localhost:3000/api/v1` |
 | `NEXT_PUBLIC_SITE_URL` | URL pública do frontend | `http://localhost:3001`        |
+| `REVALIDATE_SECRET`    | Segredo do webhook `POST /api/revalidate` (mesmo valor no backend) | — (opcional em dev) |
+
+### Cache no Render
+
+O frontend usa ISR (`revalidate` + `tags`). Após ingestão, o backend chama `POST /api/revalidate` com header `X-Revalidate-Secret` para invalidar `articles`, `categories` e `tags` imediatamente. Configure `REVALIDATE_SECRET` no frontend e no backend (`FRONTEND_REVALIDATE_URL` apontando para este serviço).
 
 ### 3. Iniciar o servidor de desenvolvimento
 
@@ -148,7 +153,8 @@ src/
 ├── app/              # App Router (pages, layouts, estados, _components/)
 ├── components/       # layout/, ui/, articles/
 ├── lib/
-│   ├── api/          # client, articles, categories, tags, schemas
+│   ├── api/          # client, articles, categories, tags, schemas, cache
+│   ├── revalidate/   # handle-revalidate-request (webhook ISR)
 │   ├── constants/    # pagination (limites e opções de página)
 │   └── utils/        # list-params, pagination, format-date, etc.
 ├── types/            # Contratos da API

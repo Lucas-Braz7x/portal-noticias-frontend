@@ -97,6 +97,26 @@ interface ApiError { error: { code, message } }
 | `ARTICLE_NOT_FOUND` | 404 | `notFound()` no detalhe |
 | `UNKNOWN_ERROR` | outros | `error.tsx` ou mensagem genérica |
 
+### 4.4 Cache e invalidação (sem Redis)
+
+| Mecanismo | Onde | Detalhe |
+|-----------|------|---------|
+| ISR | `lib/api/cache.ts` | `revalidate` + `tags` por recurso (`articles`, `categories`, `tags`) |
+| Invalidação on-demand | `POST /api/revalidate` | `src/app/api/revalidate/route.ts` |
+| Webhook | Backend → frontend | Após ingestão, backend chama o endpoint com `X-Revalidate-Secret` |
+
+**Contrato do webhook:**
+
+```http
+POST /api/revalidate
+X-Revalidate-Secret: <REVALIDATE_SECRET>
+Content-Type: application/json
+
+{ "tags": ["articles", "categories", "tags"] }
+```
+
+Resposta `200`: `{ "revalidated": true, "tags": [...] }`. Tags desconhecidas são ignoradas; se nenhuma tag válida for enviada, revalida `articles`.
+
 ---
 
 ## 5. Variáveis de ambiente
@@ -104,7 +124,10 @@ interface ApiError { error: { code, message } }
 | Variável | Uso |
 |----------|-----|
 | `API_URL` | Server Components — base da API backend |
-| `NEXT_PUBLIC_SITE_URL` | URL pública do frontend (reservado para metadata/SEO) |
+| `NEXT_PUBLIC_SITE_URL` | URL pública do frontend (metadata/SEO) |
+| `REVALIDATE_SECRET` | Segredo do webhook `POST /api/revalidate` (mesmo valor no backend) |
+
+No **Render**, configure `REVALIDATE_SECRET` neste serviço e `FRONTEND_REVALIDATE_URL` + `REVALIDATE_SECRET` no backend apontando para `https://<frontend>/api/revalidate`.
 
 ---
 
@@ -118,6 +141,7 @@ interface ApiError { error: { code, message } }
 6. [x] Busca e filtros (RF03–RF05)
 7. [x] Detalhe do artigo (RF06)
 8. [x] Playwright E2E (RF01–RF06, RF11), cache ISR, validação Zod
+9. [x] Invalidação on-demand via `POST /api/revalidate` (webhook do backend após ingestão)
 
 ---
 

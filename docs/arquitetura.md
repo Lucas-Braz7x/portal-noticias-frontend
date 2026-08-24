@@ -126,9 +126,15 @@ Schemas em `src/lib/api/schemas/article.ts` espelham o [SDD do backend](../porta
 
 Helpers: `articlesCacheOptions()`, `categoriesCacheOptions()`, `tagsCacheOptions()`.
 
-**Futuro (produção):** webhook de ingestão no backend pode chamar `revalidateTag('articles')` no frontend para invalidação imediata — não implementado neste setup.
+### Invalidação on-demand
 
-> O backend não habilita CORS. Toda chamada à API é **server-side**.
+Rota `POST /api/revalidate` (`src/app/api/revalidate/route.ts`):
+
+- Header `X-Revalidate-Secret` deve corresponder a `REVALIDATE_SECRET`
+- Body opcional: `{ "tags": ["articles", "categories", "tags"] }` (tags desconhecidas são ignoradas; default `articles`)
+- Após ingestão, o backend chama este endpoint (fire-and-forget) quando `FRONTEND_REVALIDATE_URL` e `REVALIDATE_SECRET` estão configurados
+
+> O backend não habilita CORS. Toda chamada à API é **server-side**; o webhook de revalidação é server-to-server.
 
 ### Suspense granular (home)
 
@@ -165,9 +171,11 @@ src/
 │   ├── error.module.scss
 │   ├── not-found.tsx
 │   ├── globals.scss
-│   └── articles/[slug]/
-│       ├── page.tsx
-│       └── loading.tsx
+│   ├── articles/[slug]/
+│   │   ├── page.tsx
+│   │   └── loading.tsx
+│   └── api/revalidate/
+│       └── route.ts      # webhook ISR (backend → frontend)
 ├── components/
 │   ├── articles/
 │   ├── layout/
@@ -181,6 +189,8 @@ src/
 │   │   ├── articles.ts
 │   │   ├── categories.ts
 │   │   └── tags.ts
+│   ├── revalidate/
+│   │   └── handle-revalidate-request.ts
 │   ├── constants/
 │   │   └── pagination.ts
 │   └── utils/
@@ -200,6 +210,8 @@ test/
 │   │   ├── articles.spec.ts
 │   │   ├── categories.spec.ts
 │   │   └── tags.spec.ts
+│   ├── revalidate/
+│   │   └── handle-revalidate-request.spec.ts
 │   └── utils/
 │       ├── list-params.spec.ts
 │       ├── pagination.spec.ts
