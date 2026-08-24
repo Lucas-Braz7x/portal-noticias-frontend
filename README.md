@@ -40,11 +40,11 @@ yarn install
 cp .env.example .env
 ```
 
-| Variável               | Descrição               | Exemplo                        |
-| ---------------------- | ----------------------- | ------------------------------ |
-| `API_URL`              | Base URL da API backend | `http://localhost:3000/api/v1` |
-| `NEXT_PUBLIC_SITE_URL` | URL pública do frontend | `http://localhost:3001`        |
-| `REVALIDATE_SECRET`    | Segredo do webhook `POST /api/revalidate` (mesmo valor no backend) | — (opcional em dev) |
+| Variável               | Descrição                                                          | Exemplo                        |
+| ---------------------- | ------------------------------------------------------------------ | ------------------------------ |
+| `API_URL`              | Base URL da API backend                                            | `http://localhost:3000/api/v1` |
+| `NEXT_PUBLIC_SITE_URL` | URL pública do frontend                                            | `http://localhost:3001`        |
+| `REVALIDATE_SECRET`    | Segredo do webhook `POST /api/revalidate` (mesmo valor no backend) | — (opcional em dev)            |
 
 ### Cache no Render
 
@@ -99,13 +99,16 @@ O **[Husky](https://typicode.github.io/husky/)** executa `yarn lint`, `yarn form
 
 ## CI
 
-O pipeline em [`.github/workflows/ci.yml`](.github/workflows/ci.yml) roda em **push** e **pull request** para `main`/`master`, com **Node.js 22** e três jobs em paralelo:
+O pipeline em [`.github/workflows/ci.yml`](.github/workflows/ci.yml) roda em **push** e **pull request** para `main`/`master`, com **Node.js 22**:
 
-| Job       | Comando(s)                       | Infra |
-| --------- | -------------------------------- | ----- |
-| `quality` | `yarn lint`, `yarn format:check` | —     |
-| `unit`    | `yarn test:cov`                  | —     |
-| `build`   | `yarn build`                     | —     |
+| Job       | Comando(s)                       | Infra                                     |
+| --------- | -------------------------------- | ----------------------------------------- |
+| `quality` | `yarn lint`, `yarn format:check` | —                                         |
+| `unit`    | `yarn test:cov`                  | —                                         |
+| `build`   | `yarn build`                     | —                                         |
+| `deploy`  | deploy hook Render               | só em **push** em `main`, após jobs acima |
+
+O job `deploy` dispara o deploy de produção no Render via secret `RENDER_DEPLOY_HOOK_URL`. PR previews são criados automaticamente pelo Render. Ver [deploy-render.md § CI/CD](../portal-noticias-backend/docs/deploy-render.md#4-cicd-github-actions--render) no repositório do backend.
 
 Para reproduzir localmente os mesmos passos do CI:
 
