@@ -2,7 +2,12 @@
 
 Interface web do portal de notícias/artigos, desenvolvida como parte do desafio técnico da **Gazeta do Povo**.
 
-Construída com **Next.js 16 (App Router)**, **TypeScript strict** e **SASS Modules**, consumindo a API REST do backend.
+|                 |                                                                                                              |
+| --------------- | ------------------------------------------------------------------------------------------------------------ |
+| **Repositório** | [github.com/Lucas-Braz7x/portal-noticias-frontend](https://github.com/Lucas-Braz7x/portal-noticias-frontend) |
+| **Produção**    | [portal-noticias-frontend.onrender.com](https://portal-noticias-frontend.onrender.com)                       |
+
+Construída com **Next.js 16 (App Router)**, **TypeScript strict** e **SASS Modules**, consumindo a API REST do backend ([repositório separado](https://github.com/Lucas-Braz7x/portal-noticias-backend)).
 
 ---
 
@@ -22,15 +27,17 @@ Construída com **Next.js 16 (App Router)**, **TypeScript strict** e **SASS Modu
 
 - Node.js 20+
 - Yarn 1.22+
-- Backend rodando em `http://localhost:3000` (ver [portal-noticias-backend](../portal-noticias-backend))
+- Backend rodando em `http://localhost:3000` (ver [portal-noticias-backend](https://github.com/Lucas-Braz7x/portal-noticias-backend))
 
 ---
 
 ## Como rodar
 
-### 1. Instalar dependências
+### 1. Clonar e instalar dependências
 
 ```bash
+git clone https://github.com/Lucas-Braz7x/portal-noticias-frontend.git
+cd portal-noticias-frontend
 yarn install
 ```
 
@@ -108,7 +115,7 @@ O pipeline em [`.github/workflows/ci.yml`](.github/workflows/ci.yml) roda em **p
 | `build`   | `yarn build`                     | —                                         |
 | `deploy`  | deploy hook Render               | só em **push** em `main`, após jobs acima |
 
-O job `deploy` dispara o deploy de produção no Render via secret `RENDER_DEPLOY_HOOK_URL`. PR previews são criados automaticamente pelo Render. Ver [deploy-render.md § CI/CD](../portal-noticias-backend/docs/deploy-render.md#4-cicd-github-actions--render) no repositório do backend.
+O job `deploy` dispara o deploy de produção no Render via secret `RENDER_DEPLOY_HOOK_URL`. PR previews são criados automaticamente pelo Render. Ver [docs/deploy-render.md § CI/CD](./docs/deploy-render.md#2-cicd-github-actions--render).
 
 Para reproduzir localmente os mesmos passos do CI:
 
@@ -125,9 +132,9 @@ Os testes E2E usam **Playwright** contra o backend real (não mock). **Não roda
 
 ### Pré-requisitos
 
-1. Infraestrutura do backend: `docker compose up -d` em [portal-noticias-backend](../portal-noticias-backend)
-2. Migrations e seed: `yarn prisma:migrate` e `yarn prisma db seed`
-3. API rodando: `yarn start:dev` (porta 3000)
+1. Clone e configure o [repositório do backend](https://github.com/Lucas-Braz7x/portal-noticias-backend): `docker compose up -d`
+2. Migrations e seed no backend: `yarn prisma:migrate` e `yarn prisma db seed`
+3. API rodando no backend: `yarn start:dev` (porta 3000)
 
 ### Executar
 
@@ -149,6 +156,26 @@ O Playwright inicia o frontend automaticamente (`yarn dev` localmente; `yarn bui
 
 ---
 
+## Arquitetura
+
+Camadas simples com **Server Components** por padrão e fetch server-side para a API (backend sem CORS):
+
+```
+App Router (pages) → lib/api → Backend REST
+                 ↘ components/ (apresentação)
+```
+
+- **Páginas** — Server Components; dados via `lib/api/`, nunca `fetch` direto na UI
+- **`lib/api/`** — client HTTP, schemas Zod, cache ISR (`tags` + `revalidate`)
+- **`components/`** — layout, artigos, estados RF11 (apresentacionais)
+- **`POST /api/revalidate`** — webhook ISR chamado pelo backend após ingestão
+
+**Mobile-first** com SASS Modules — ver [docs/mobile-first.md](./docs/mobile-first.md).
+
+Documentação completa: [docs/arquitetura.md](./docs/arquitetura.md) · produção: [docs/arquitetura-producao.md](./docs/arquitetura-producao.md)
+
+---
+
 ## Estrutura do projeto
 
 ```
@@ -166,7 +193,7 @@ src/
 test/                 # Testes Vitest
 e2e/                  # Testes Playwright E2E (local)
 .husky/               # git hooks (pre-commit → lint, format, test:cov)
-docs/                 # SDD, arquitetura, requisitos
+docs/                 # SDD, arquitetura, deploy, requisitos, roadmap
 ```
 
 ---
@@ -178,15 +205,43 @@ docs/                 # SDD, arquitetura, requisitos
 | [docs/requisitos-funcionais-nao-funcionais.md](./docs/requisitos-funcionais-nao-funcionais.md) | Baseline do edital (RF/RNF)              |
 | [docs/SDD.md](./docs/SDD.md)                                                                   | Rastreabilidade, rotas, contratos da API |
 | [docs/arquitetura.md](./docs/arquitetura.md)                                                   | Camadas, fetch, testes                   |
+| [docs/arquitetura-producao.md](./docs/arquitetura-producao.md)                                 | Render, ISR, integração com a API        |
+| [docs/mobile-first.md](./docs/mobile-first.md)                                                 | Breakpoints, mixin `respond-from`, grids |
+| [docs/deploy-render.md](./docs/deploy-render.md)                                               | Deploy no Render e CI/CD                 |
+| [docs/proximos-passos.md](./docs/proximos-passos.md)                                           | Roadmap: E2E no CI, SEO, auth, i18n      |
 | [docs/uso-de-ia.md](./docs/uso-de-ia.md)                                                       | Uso responsável de IA (RNF16)            |
 
-Contratos da API: [SDD do backend](../portal-noticias-backend/docs/SDD.md#4-contratos-da-api).
+### Uso de IA (RNF16)
+
+A IA (**Cursor** — Sonnet para planejamento, Composer para execução) foi usada como **acelerador de rascunhos**, não como autor do projeto. Decisões de arquitetura, contratos da API, UX e merge ficaram sob revisão manual.
+
+| Onde ajudou         | Exemplos de prompt (resumo)                                                 |
+| ------------------- | --------------------------------------------------------------------------- |
+| Documentação        | _"SDD frontend com rotas RF01–RF06/RF11 e contratos consumidos do backend"_ |
+| API client + testes | _"lib/api com Zod espelhando SDD backend; Vitest mockando fetch"_           |
+| UI e fluxos         | _"Home com filtros GET, paginação numerada e Suspense por seção"_           |
+| Cache ISR           | _"Tags por recurso + POST /api/revalidate com segredo compartilhado"_       |
+
+Decisões revisadas manualmente: Server Components (backend sem CORS), SASS Modules, URL como estado dos filtros, E2E Playwright só local, docs independentes entre repos.
+
+Documento completo — prompts, trade-offs, premissas e mini resumo da solução: **[docs/uso-de-ia.md](./docs/uso-de-ia.md)**.
+
+---
+
+## Backend (repositório separado)
+
+|                 |                                                                                                            |
+| --------------- | ---------------------------------------------------------------------------------------------------------- |
+| **Repositório** | [github.com/Lucas-Braz7x/portal-noticias-backend](https://github.com/Lucas-Braz7x/portal-noticias-backend) |
+| **Produção**    | [portal-noticias-backend.onrender.com](https://portal-noticias-backend.onrender.com/)                      |
+
+Contratos da API (endpoints, payloads, erros): [SDD do backend — § Contratos da API](https://github.com/Lucas-Braz7x/portal-noticias-backend/blob/main/docs/SDD.md#4-contratos-da-api).
 
 ---
 
 ## API backend
 
-O frontend consome a API em `API_URL`. Chamadas são **server-side** (Server Components) — o backend não habilita CORS.
+O frontend consome a API em `API_URL` (em produção: `https://portal-noticias-backend.onrender.com/api/v1`). Chamadas são **server-side** (Server Components) — o backend não habilita CORS.
 
 Endpoints utilizados:
 
@@ -194,3 +249,42 @@ Endpoints utilizados:
 - `GET /articles/:slug` — detalhe do artigo
 - `GET /categories` — opções do filtro de categoria
 - `GET /tags` — opções do filtro de tag
+
+---
+
+## Variáveis de ambiente
+
+| Variável               | Descrição                                                          | Default / exemplo (dev)        |
+| ---------------------- | ------------------------------------------------------------------ | ------------------------------ |
+| `API_URL`              | Base URL da API backend (Server Components)                        | `http://localhost:3000/api/v1` |
+| `NEXT_PUBLIC_SITE_URL` | URL pública do frontend (metadata, SEO, links absolutos)           | `http://localhost:3001`        |
+| `REVALIDATE_SECRET`    | Segredo do webhook `POST /api/revalidate` (mesmo valor no backend) | — (opcional em dev)            |
+
+Em **produção** (Render): ver [docs/deploy-render.md](./docs/deploy-render.md). Alinhar `FRONTEND_REVALIDATE_URL` e `REVALIDATE_SECRET` no backend.
+
+Deploy completo: [docs/deploy-render.md](./docs/deploy-render.md).
+
+---
+
+## Commits
+
+Este projeto segue **[Conventional Commits](https://www.conventionalcommits.org/)**:
+
+```
+<type>(<scope>): <descrição curta>
+```
+
+| Tipo       | Uso                                      |
+| ---------- | ---------------------------------------- |
+| `feat`     | Nova funcionalidade                      |
+| `fix`      | Correção de bug                          |
+| `docs`     | Documentação                             |
+| `test`     | Testes                                   |
+| `chore`    | Manutenção (deps, configs, tooling)      |
+| `refactor` | Refatoração sem mudança de comportamento |
+
+---
+
+## Licença
+
+Projeto privado — uso exclusivo para avaliação técnica.

@@ -12,8 +12,11 @@ Antes de implementar, refatorar ou tomar decisões arquiteturais, **leia a docum
 1. **`docs/requisitos-funcionais-nao-funcionais.md`** — baseline do edital (RF/RNF)
 2. **`docs/SDD.md`** — rotas, contratos consumidos da API, rastreabilidade
 3. **`docs/arquitetura.md`** — camadas, Server vs Client Components, fetch, testes
-4. **`docs/mobile-first.md`** — breakpoints, mixin `respond-from`, padrões responsivos
-5. **`README.md`** — setup, scripts, variáveis de ambiente
+4. **`docs/arquitetura-producao.md`** — Render, ISR, webhook, integração com API
+5. **`docs/mobile-first.md`** — breakpoints, mixin `respond-from`, padrões responsivos
+6. **`docs/deploy-render.md`** — deploy e CI/CD no Render
+7. **`docs/proximos-passos.md`** — roadmap e prioridades
+8. **`README.md`** — setup, scripts, variáveis de ambiente
 
 ## Quando consultar
 
@@ -27,7 +30,7 @@ Antes de implementar, refatorar ou tomar decisões arquiteturais, **leia a docum
 
 - Não contradizer decisões já registradas sem explicitar o motivo ao usuário
 - Se a doc estiver desatualizada após uma mudança, **propor atualização** dos docs afetados
-- Contratos da API: consultar também o SDD do backend (`portal-noticias-backend/docs/SDD.md`)
+- Contratos da API: consultar o [SDD do backend no GitHub](https://github.com/Lucas-Braz7x/portal-noticias-backend/blob/main/docs/SDD.md#4-contratos-da-api) (repositório separado)
 
 ## Referência rápida de decisões
 

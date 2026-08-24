@@ -3,6 +3,11 @@
 > **Spec Driven Development** — decisões de implementação registradas antes e durante o código.  
 > Requisitos funcionais e não funcionais do desafio: [requisitos-funcionais-nao-funcionais.md](./requisitos-funcionais-nao-funcionais.md).
 
+| | |
+|---|---|
+| **Repositório** | [github.com/Lucas-Braz7x/portal-noticias-frontend](https://github.com/Lucas-Braz7x/portal-noticias-frontend) |
+| **Produção** | [portal-noticias-frontend.onrender.com](https://portal-noticias-frontend.onrender.com) |
+
 ---
 
 ## 1. Rastreabilidade
@@ -19,7 +24,7 @@ Mapa entre requisitos do edital e implementação neste repositório (frontend).
 | [RF04](./requisitos-funcionais-nao-funcionais.md#rf04--filtro-por-categoria) | ✅ | `ArticleFilters` — select `category` (slug) |
 | [RF05](./requisitos-funcionais-nao-funcionais.md#rf05--filtro-por-tag) | ✅ | `ArticleFilters` — select `tag` (slug) |
 | [RF06](./requisitos-funcionais-nao-funcionais.md#rf06--visualização-do-artigo) | ✅ | `/articles/[slug]` — `ArticleDetailView` via `getArticleBySlug()` |
-| [RF07](./requisitos-funcionais-nao-funcionais.md#rf07--api-de-artigos) | — | Backend ([SDD backend](https://github.com)) |
+| [RF07](./requisitos-funcionais-nao-funcionais.md#rf07--api-de-artigos) | — | Backend ([repositório](https://github.com/Lucas-Braz7x/portal-noticias-backend)) |
 | [RF08](./requisitos-funcionais-nao-funcionais.md#rf08--ingestão-de-artigos) | — | Backend |
 | [RF09](./requisitos-funcionais-nao-funcionais.md#rf09--persistência) | — | Backend |
 | [RF10](./requisitos-funcionais-nao-funcionais.md#rf10--dados-iniciais) | — | Backend |
@@ -33,7 +38,7 @@ Legenda: ✅ implementado · 🔜 planejado · — fora deste repo
 |-----------|--------|--------------------------|
 | [RNF01](./requisitos-funcionais-nao-funcionais.md#rnf01--typescript) | ✅ | TypeScript com `strict` no `tsconfig.json` |
 | [RNF07](./requisitos-funcionais-nao-funcionais.md#rnf07--testabilidade) | ✅ | Vitest + Testing Library; teste do API client |
-| [RNF14](./requisitos-funcionais-nao-funcionais.md#rnf14--documentação) | ✅ | README, SDD, arquitetura, requisitos |
+| [RNF14](./requisitos-funcionais-nao-funcionais.md#rnf14--documentação) | ✅ | README, SDD, arquitetura, deploy, requisitos |
 | [RNF15](./requisitos-funcionais-nao-funcionais.md#rnf15--spec-driven-development) | ✅ | Este documento |
 | [RNF16](./requisitos-funcionais-nao-funcionais.md#rnf16--uso-responsável-de-ia) | ✅ | [uso-de-ia.md](./uso-de-ia.md) |
 
@@ -65,7 +70,7 @@ Legenda: ✅ implementado · 🔜 planejado · — fora deste repo
 
 Base URL: `API_URL` (ex.: `http://localhost:3000/api/v1`)
 
-Contratos definidos no [SDD do backend](../portal-noticias-backend/docs/SDD.md#4-contratos-da-api).
+Contratos definidos no [SDD do backend](https://github.com/Lucas-Braz7x/portal-noticias-backend/blob/main/docs/SDD.md#4-contratos-da-api) (repositório separado).
 
 ### 4.1 Tipos (`src/types/article.ts`)
 
@@ -127,11 +132,11 @@ Resposta `200`: `{ "revalidated": true, "tags": [...] }`. Tags desconhecidas sã
 | `NEXT_PUBLIC_SITE_URL` | URL pública do frontend (metadata/SEO) |
 | `REVALIDATE_SECRET` | Segredo do webhook `POST /api/revalidate` (mesmo valor no backend) |
 
-No **Render**, configure `REVALIDATE_SECRET` neste serviço e `FRONTEND_REVALIDATE_URL` + `REVALIDATE_SECRET` no backend apontando para `https://<frontend>/api/revalidate`.
+No **Render**, configure `REVALIDATE_SECRET` neste serviço e `FRONTEND_REVALIDATE_URL` + `REVALIDATE_SECRET` no backend apontando para `https://portal-noticias-frontend.onrender.com/api/revalidate`. Detalhes: [deploy-render.md](./deploy-render.md).
 
 ---
 
-## 6. Próximos passos
+## 6. Histórico de implementação
 
 1. [x] Scaffold Next.js + SASS + Vitest + Prettier
 2. [x] Tipos + API client + teste Vitest
@@ -145,4 +150,38 @@ No **Render**, configure `REVALIDATE_SECRET` neste serviço e `FRONTEND_REVALIDA
 
 ---
 
-*Versão: 1.0 — Agosto/2026*
+## 5. Riscos, simplificações e próximos passos
+
+### 5.1 Riscos
+
+| Risco | Mitigação |
+|-------|-----------|
+| API indisponível no build/runtime | CI exige `API_URL` no build; health check manual pós-deploy |
+| Payload divergente do contrato | Zod na fronteira (`parseApiResponse`); testes Vitest do API client |
+| Conteúdo stale após ingestão | Webhook ISR + TTL (60s artigos); monitorar `REVALIDATE_SECRET` |
+| Regressão em páginas sem E2E no CI | Playwright local antes de merge; roadmap E2E no CI |
+
+### 5.2 Simplificações assumidas
+
+- Fetch **100% server-side** — backend sem CORS
+- Busca/filtros via **form GET** (URL como estado) — sem debounce client-side
+- **ISR** em vez de Redis — alinhado ao deploy Render
+- RF07–RF10 implementados no [backend](https://github.com/Lucas-Braz7x/portal-noticias-backend)
+
+### 5.3 Fora do escopo
+
+Ver [§4 do documento de requisitos](./requisitos-funcionais-nao-funcionais.md#4-fora-do-escopo).
+
+### 5.4 Próximos passos
+
+Roadmap priorizado: [proximos-passos.md](./proximos-passos.md).
+
+Resumo:
+
+- E2E no CI (Playwright + backend dockerizado)
+- Open Graph / metadata avançada
+- Dark mode persistido; autenticação quando o backend evoluir
+
+---
+
+*Versão: 1.2 — Agosto/2026*

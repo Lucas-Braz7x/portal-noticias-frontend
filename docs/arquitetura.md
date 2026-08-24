@@ -1,7 +1,7 @@
 # Arquitetura — Portal de Notícias Frontend
 
 > Guia de decisões arquiteturais, padrões e convenções do projeto.  
-> Complementa o [SDD](./SDD.md) e a [baseline de requisitos](./requisitos-funcionais-nao-funcionais.md).
+> Complementa o [SDD](./SDD.md), a [baseline de requisitos](./requisitos-funcionais-nao-funcionais.md) e a [arquitetura de produção](./arquitetura-producao.md).
 
 ---
 
@@ -103,7 +103,7 @@ fetch → response.json() → parseApiResponse(schema) → componente
 | HTTP 4xx/5xx | `ApiClientError` | Resposta de erro da API |
 | Payload inválido | `ApiValidationError` | JSON não bate com o schema Zod |
 
-Schemas em `src/lib/api/schemas/article.ts` espelham o [SDD do backend](../portal-noticias-backend/docs/SDD.md#4-contratos-da-api).
+Schemas em `src/lib/api/schemas/article.ts` espelham o [SDD do backend](https://github.com/Lucas-Braz7x/portal-noticias-backend/blob/main/docs/SDD.md#4-contratos-da-api).
 
 ---
 
@@ -259,7 +259,7 @@ yarn test:e2e          # E2E — apenas local
 
 **CI (GitHub Actions):** jobs `quality`, `unit` e `build` em [`.github/workflows/ci.yml`](../.github/workflows/ci.yml). E2E **não** roda no CI.
 
-**Pré-requisito E2E:** backend com docker-compose, migrations e seed rodando em `localhost:3000`.
+**Pré-requisito E2E:** [backend](https://github.com/Lucas-Braz7x/portal-noticias-backend) com docker-compose, migrations e seed rodando em `localhost:3000`.
 
 ---
 

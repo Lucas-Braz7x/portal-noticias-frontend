@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 /**
  * E2E tests require the backend API running with seed data:
- *   cd portal-noticias-backend && docker compose up -d
+ *   Clone https://github.com/Lucas-Braz7x/portal-noticias-backend && docker compose up -d
  *   yarn prisma:migrate && yarn prisma db seed && yarn start:dev
  *
  * Frontend is started automatically via webServer (or reuse existing dev server locally).
